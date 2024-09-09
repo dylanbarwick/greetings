@@ -23,7 +23,8 @@
  */
 
 require('../../config.php');
-$context = context_system::instance();
+require_once($CFG->dirroot. '/local/greetings/lib.php');
+$context = \core\context\system::instance();
 $PAGE->set_context($context);
 
 $url = new moodle_url('/local/greetings/index.php', []);
@@ -35,11 +36,20 @@ $PAGE->set_title(get_string('pluginname', 'local_greetings'));
 
 require_login();
 
-$PAGE->set_heading($SITE->fullname);
+$PAGE->set_heading(get_string('pluginname', 'local_greetings'));
 echo $OUTPUT->header();
 if (isloggedin()) {
-    echo '<h3>Greetings, ' . fullname($USER) . '</h3>';
+    echo '<h2>' . get_string('greetinguserloggedin', 'local_greetings', fullname($USER)) . '</h2>';
+    echo '<div>' . local_greetings_get_greeting($USER) . '</div>';
+    $now = time();
+    echo '<div>' . userdate($now) . '</div>';
+    echo '<div>' . userdate(time(), get_string('strftimedaydate', 'core_langconfig')) . '</div>';
+    $date = new DateTime("tomorrow", core_date::get_user_timezone_object());
+    $date->setTime(0, 0, 0);
+    echo '<div>' . userdate($date->getTimestamp(), get_string('strftimedatefullshort', 'core_langconfig')) . '</div>';
+    $grade = 20.00 / 3;
+    echo '<div>' . format_float($grade, 2) . '</div>';
 } else {
-    echo '<h3>Greetings, user</h3>';
+    echo '<h2>' . get_string('greetinguseranon', 'local_greetings') .'</h2>';
 }
 echo $OUTPUT->footer();
