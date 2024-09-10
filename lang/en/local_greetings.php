@@ -34,4 +34,4 @@ $string['greetinguseres'] = 'Hola, {$a}.';
 $string['greetinguserfj'] = 'Bula, {$a}.';
 $string['greetinguserloggedin'] = 'Hello there, {$a}.';
 $string['greetingusernz'] = 'Kia Ora, {$a}.';
-$string['pluginname'] = 'Greetings doodle';
+$string['pluginname'] = 'Greetings module';
