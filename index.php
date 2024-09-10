@@ -37,6 +37,8 @@ $PAGE->set_title(get_string('pluginname', 'local_greetings'));
 require_login();
 
 $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
+
+$messageform = new \local_greetings\form\message_form();
 echo $OUTPUT->header();
 if (isloggedin()) {
     echo '<h2>' . get_string('greetinguserloggedin', 'local_greetings', fullname($USER)) . '</h2>';
@@ -51,5 +53,11 @@ if (isloggedin()) {
     echo '<div>' . format_float($grade, 2) . '</div>';
 } else {
     echo '<h2>' . get_string('greetinguseranon', 'local_greetings') .'</h2>';
+}
+
+$messageform->display();
+if ($data = $messageform->get_data()) {
+    $message = required_param('message', PARAM_TEXT);
+    echo $OUTPUT->heading($message, 2);
 }
 echo $OUTPUT->footer();
