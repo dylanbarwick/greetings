@@ -35,4 +35,5 @@ $string['greetinguserfj'] = 'Bula, {$a}.';
 $string['greetinguserloggedin'] = 'Hello there, {$a}.';
 $string['greetingusernz'] = 'Kia Ora, {$a}.';
 $string['pluginname'] = 'Greetings module';
+$string['postedby'] = 'Posted by {$a}.';
 $string['yourmessage'] = 'Your message';
