@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['greeting'] = 'Beatings';
 $string['greetings:deleteanymessage'] = 'Delete any message on the Greetings wall';
+$string['greetings:deleteownmessage'] = 'Delete only the user\'s own messages on the Greetings wall';
 $string['greetings:postmessages'] = 'Post a new message on the Greetings wall';
 $string['greetings:viewmessages'] = 'View messages on the Greetings wall';
 $string['greetinguser'] = 'Greetings, {$a}';

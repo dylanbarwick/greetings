@@ -48,6 +48,7 @@ if (isguestuser()) {
 $allowpost = has_capability('local/greetings:postmessages', $context);
 $allowview = has_capability('local/greetings:viewmessages', $context);
 $deleteanypost = has_capability('local/greetings:deleteanymessage', $context);
+$deleteownpost = has_capability('local/greetings:deleteownmessage', $context);
 
 // Delete a message.
 $action = optional_param('action', '', PARAM_TEXT);
@@ -58,6 +59,14 @@ if ($action == 'del') {
     if ($deleteanypost) {
         $params = ['id' => $id];
         $DB->delete_records('local_greetings_messages', $params);
+    }
+    else if ($deleteownpost) {
+        $params = ['id' => $id];
+        $message = $DB->get_record('local_greetings_messages', $params);
+
+        if ($message->userid == $USER->id) {
+            $DB->delete_records('local_greetings_messages', $params);
+        }
     }
 }
 
@@ -76,6 +85,7 @@ if ($data = $messageform->get_data()) {
         $record->userid = $USER->id;
 
         $DB->insert_record('local_greetings_messages', $record);
+        redirect($PAGE->url);
     }
 }
 
@@ -128,13 +138,16 @@ if ($allowview) {
                 $m->firstname . ' ' . $m->lastname
               ), ['class' => 'card-text']);
         echo html_writer::tag('small', userdate($m->timecreated), ['class' => 'text-muted']);
-        // Display a dlete link if the user can delete this message.
-        if ($deleteanypost) {
+        // Display a delete link if the user can delete this message.
+        if ($deleteanypost || ($deleteownpost && $m->userid == $USER->id)) {
             echo html_writer::start_tag('p', ['class' => 'card-footer text-center']);
             echo html_writer::link(
                 new moodle_url(
                     '/local/greetings/index.php',
-                    ['action' => 'del', 'id' => $m->id]
+                    [
+                        'action' => 'del',
+                        'id' => $m->id,
+                    ]
                 ),
                 $OUTPUT->pix_icon('t/delete', '') . get_string('delete')
             );
