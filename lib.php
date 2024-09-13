@@ -63,11 +63,13 @@ function local_greetings_get_greeting($user) {
  *   Node representing the front page in the navigation tree.
  */
 function local_greetings_extend_navigation_frontpage(navigation_node $frontpage) {
-    $frontpage->add(
-        get_string('pluginname', 'local_greetings') . ' (front page)',
-        new moodle_url('/local/greetings/index.php'),
-        navigation_node::TYPE_CUSTOM,
-    );
+    if (isloggedin() && !isguestuser()) {
+        $frontpage->add(
+            get_string('pluginname', 'local_greetings') . ' (front page)',
+            new moodle_url('/local/greetings/index.php'),
+            navigation_node::TYPE_CUSTOM,
+        );
+    }
 }
 
 /**
@@ -77,15 +79,17 @@ function local_greetings_extend_navigation_frontpage(navigation_node $frontpage)
  *   Node representing the navigation tree.
  */
 function local_greetings_extend_navigation(global_navigation $root) {
-    $node = navigation_node::create(
-        get_string('pluginname', 'local_greetings') . ' (site)',
-        new moodle_url('/local/greetings/index.php'),
-        navigation_node::TYPE_CUSTOM,
-        null,
-        null,
-        new pix_icon('t/message', '')
-    );
+    if (isloggedin() && !isguestuser()) {
+        $node = navigation_node::create(
+            get_string('pluginname', 'local_greetings') . ' (site)',
+            new moodle_url('/local/greetings/index.php'),
+            navigation_node::TYPE_CUSTOM,
+            null,
+            null,
+            new pix_icon('t/message', '')
+        );
 
-    $node->showinflatnavigation = true;
-    $root->add_node($node);
+        $node->showinflatnavigation = true;
+        $root->add_node($node);
+    }
 }

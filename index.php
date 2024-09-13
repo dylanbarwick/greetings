@@ -34,9 +34,12 @@ $PAGE->set_pagelayout('standard');
 
 $PAGE->set_title(get_string('pluginname', 'local_greetings'));
 
-require_login();
-
 $PAGE->set_heading(get_string('pluginname', 'local_greetings'));
+
+require_login();
+if (isguestuser()) {
+    throw new moodle_exception('noguest');
+}
 
 $messageform = new \local_greetings\form\message_form();
 
@@ -86,7 +89,7 @@ echo $OUTPUT->box_start('card-columns');
 foreach ($messages as $m) {
     echo html_writer::start_tag('div', ['class' => 'card', 'id' => 'message-' . $m->id, 'data-messageid' => $m->id]);
     echo html_writer::start_tag('div', ['class' => 'card-body']);
-    echo html_writer::tag('p', $m->message, ['class' => 'card-text']);
+    echo html_writer::tag('p', format_text($m->message, FORMAT_PLAIN), ['class' => 'card-text']);
     echo html_writer::start_tag('p', ['class' => 'card-text']);
     echo html_writer::tag(
         'p',
